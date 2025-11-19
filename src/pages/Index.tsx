@@ -4,10 +4,22 @@ import Header from '../components/Header';
 import ProductCard from '../components/ProductCard';
 import PopButton from '../components/PopButton';
 import ProductModal from '../components/ProductModal';
+import ShoppingCartModal from '../components/ShoppingCartModal';
+import { useCart } from '../hooks/useCart';
 
 const Index = () => {
   const [selectedProduct, setSelectedProduct] = useState<typeof products[0] | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const {
+    cartItems,
+    isCartOpen,
+    setIsCartOpen,
+    addToCart,
+    updateQuantity,
+    removeItem,
+    getCartCount,
+  } = useCart();
 
   const handleProductClick = (product: typeof products[0]) => {
     setSelectedProduct(product);
@@ -17,6 +29,19 @@ const Index = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setTimeout(() => setSelectedProduct(null), 300);
+  };
+
+  const handleAddToCart = (
+    product: typeof products[0],
+    size?: string,
+    color?: string
+  ) => {
+    addToCart({
+      ...product,
+      size,
+      color,
+    });
+    handleCloseModal();
   };
 
   const products = [
@@ -66,7 +91,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      <Header />
+      <Header cartCount={getCartCount()} onCartClick={() => setIsCartOpen(true)} />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-primary via-secondary to-accent py-20 md:py-32 border-b-8 border-foreground">
@@ -261,6 +286,16 @@ const Index = () => {
         product={selectedProduct}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
+        onAddToCart={handleAddToCart}
+      />
+
+      {/* Shopping Cart Modal */}
+      <ShoppingCartModal
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        cartItems={cartItems}
+        onUpdateQuantity={updateQuantity}
+        onRemoveItem={removeItem}
       />
     </div>
   );

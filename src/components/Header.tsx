@@ -1,7 +1,11 @@
 import { ShoppingCart, Menu, Sparkles } from 'lucide-react';
-import PopButton from './PopButton';
 
-const Header = () => {
+interface HeaderProps {
+  cartCount: number;
+  onCartClick: () => void;
+}
+
+const Header = ({ cartCount, onCartClick }: HeaderProps) => {
   return (
     <header className="sticky top-0 z-50 border-b-8 border-foreground">
       {/* Orange background section */}
@@ -36,11 +40,16 @@ const Header = () => {
 
             {/* Actions */}
             <div className="flex items-center gap-4">
-              <button className="relative p-3 bg-secondary border-4 border-foreground hover:scale-110 transition-transform">
+              <button
+                onClick={onCartClick}
+                className="relative p-3 bg-secondary border-4 border-foreground hover:scale-110 transition-transform"
+              >
                 <ShoppingCart className="w-6 h-6 text-secondary-foreground" />
-                <span className="absolute -top-2 -right-2 w-6 h-6 bg-accent text-accent-foreground rounded-full flex items-center justify-center text-xs font-bold border-2 border-foreground">
-                  3
-                </span>
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 min-w-6 h-6 px-1 bg-accent text-accent-foreground rounded-full flex items-center justify-center text-xs font-bold border-2 border-foreground animate-bounce-pop">
+                    {cartCount}
+                  </span>
+                )}
               </button>
 
               <button className="md:hidden p-3 bg-accent border-4 border-foreground">

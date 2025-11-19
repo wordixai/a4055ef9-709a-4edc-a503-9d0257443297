@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { X, ShoppingCart, Heart, Share2 } from 'lucide-react';
 import PopButton from './PopButton';
 
@@ -13,10 +14,18 @@ interface ProductModalProps {
   product: Product | null;
   isOpen: boolean;
   onClose: () => void;
+  onAddToCart: (product: Product, size?: string, color?: string) => void;
 }
 
-const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) => {
+const ProductModal = ({ product, isOpen, onClose, onAddToCart }: ProductModalProps) => {
+  const [selectedSize, setSelectedSize] = useState<string>('M');
+  const [selectedColor, setSelectedColor] = useState<string>('hsl(var(--primary))');
+
   if (!isOpen || !product) return null;
+
+  const handleAddToCart = () => {
+    onAddToCart(product, selectedSize, selectedColor);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
@@ -109,7 +118,12 @@ const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) => {
                 {['XS', 'S', 'M', 'L', 'XL'].map((size) => (
                   <button
                     key={size}
-                    className="w-16 h-16 bg-card border-4 border-foreground font-black text-xl handwritten hover:bg-accent hover:text-accent-foreground hover:scale-110 transition-all hover:rotate-[-5deg]"
+                    onClick={() => setSelectedSize(size)}
+                    className={`w-16 h-16 border-4 border-foreground font-black text-xl handwritten hover:scale-110 transition-all hover:rotate-[-5deg] ${
+                      selectedSize === size
+                        ? 'bg-accent text-accent-foreground'
+                        : 'bg-card text-foreground hover:bg-accent hover:text-accent-foreground'
+                    }`}
                   >
                     {size}
                   </button>
@@ -121,16 +135,28 @@ const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) => {
             <div className="mb-8">
               <h3 className="text-2xl font-black handwritten mb-4 text-foreground">Color:</h3>
               <div className="flex gap-3">
-                <button className="w-14 h-14 bg-primary border-4 border-foreground hover:scale-110 transition-transform"></button>
-                <button className="w-14 h-14 bg-secondary border-4 border-foreground hover:scale-110 transition-transform"></button>
-                <button className="w-14 h-14 bg-accent border-4 border-foreground hover:scale-110 transition-transform"></button>
-                <button className="w-14 h-14 bg-muted border-4 border-foreground hover:scale-110 transition-transform"></button>
+                {[
+                  { value: 'hsl(var(--primary))', label: 'Orange' },
+                  { value: 'hsl(var(--secondary))', label: 'Pink' },
+                  { value: 'hsl(var(--accent))', label: 'Yellow' },
+                  { value: 'hsl(var(--muted))', label: 'Purple' },
+                ].map((color) => (
+                  <button
+                    key={color.value}
+                    onClick={() => setSelectedColor(color.value)}
+                    className={`w-14 h-14 border-4 border-foreground hover:scale-110 transition-transform ${
+                      selectedColor === color.value ? 'ring-4 ring-foreground ring-offset-2' : ''
+                    }`}
+                    style={{ backgroundColor: color.value }}
+                    title={color.label}
+                  ></button>
+                ))}
               </div>
             </div>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <PopButton variant="primary" className="flex-1">
+              <PopButton variant="primary" className="flex-1" onClick={handleAddToCart}>
                 <span className="flex items-center justify-center gap-2">
                   <ShoppingCart className="w-6 h-6" />
                   ADD TO CART
