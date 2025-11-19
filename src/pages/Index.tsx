@@ -5,11 +5,18 @@ import ProductCard from '../components/ProductCard';
 import PopButton from '../components/PopButton';
 import ProductModal from '../components/ProductModal';
 import ShoppingCartModal from '../components/ShoppingCartModal';
+import AddressModal from '../components/AddressModal';
+import CheckoutModal from '../components/CheckoutModal';
 import { useCart } from '../hooks/useCart';
+import { useAddress } from '../hooks/useAddress';
+import { Address } from '../components/AddressModal';
 
 const Index = () => {
   const [selectedProduct, setSelectedProduct] = useState<typeof products[0] | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
 
   const {
     cartItems,
@@ -19,7 +26,16 @@ const Index = () => {
     updateQuantity,
     removeItem,
     getCartCount,
+    clearCart,
   } = useCart();
+
+  const {
+    addresses,
+    addAddress,
+    updateAddress,
+    deleteAddress,
+    getDefaultAddress,
+  } = useAddress();
 
   const handleProductClick = (product: typeof products[0]) => {
     setSelectedProduct(product);
@@ -42,6 +58,30 @@ const Index = () => {
       color,
     });
     handleCloseModal();
+  };
+
+  const handleCheckout = () => {
+    setSelectedAddress(getDefaultAddress());
+    setIsCartOpen(false);
+    setIsCheckoutModalOpen(true);
+  };
+
+  const handleSelectAddress = () => {
+    setIsCheckoutModalOpen(false);
+    setIsAddressModalOpen(true);
+  };
+
+  const handleAddressSelected = (address: Address) => {
+    setSelectedAddress(address);
+    setIsAddressModalOpen(false);
+    setIsCheckoutModalOpen(true);
+  };
+
+  const handleConfirmOrder = () => {
+    alert('🎉 Order placed successfully! Thanks for shopping with POP SHOP!');
+    clearCart();
+    setIsCheckoutModalOpen(false);
+    setSelectedAddress(null);
   };
 
   const products = [
@@ -296,6 +336,34 @@ const Index = () => {
         cartItems={cartItems}
         onUpdateQuantity={updateQuantity}
         onRemoveItem={removeItem}
+        onCheckout={handleCheckout}
+      />
+
+      {/* Address Modal */}
+      <AddressModal
+        isOpen={isAddressModalOpen}
+        onClose={() => {
+          setIsAddressModalOpen(false);
+          if (isCheckoutModalOpen) {
+            setIsCheckoutModalOpen(true);
+          }
+        }}
+        addresses={addresses}
+        onAddAddress={addAddress}
+        onUpdateAddress={updateAddress}
+        onDeleteAddress={deleteAddress}
+        onSelectAddress={handleAddressSelected}
+        selectedAddressId={selectedAddress?.id}
+      />
+
+      {/* Checkout Modal */}
+      <CheckoutModal
+        isOpen={isCheckoutModalOpen}
+        onClose={() => setIsCheckoutModalOpen(false)}
+        cartItems={cartItems}
+        selectedAddress={selectedAddress}
+        onSelectAddress={handleSelectAddress}
+        onConfirmOrder={handleConfirmOrder}
       />
     </div>
   );

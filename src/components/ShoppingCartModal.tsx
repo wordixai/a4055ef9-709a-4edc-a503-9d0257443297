@@ -1,4 +1,4 @@
-import { X, Plus, Minus, Trash2, ShoppingBag } from 'lucide-react';
+import { X, Plus, Minus, Trash2, ShoppingBag, MapPin } from 'lucide-react';
 import PopButton from './PopButton';
 
 export interface CartItem {
@@ -18,6 +18,7 @@ interface ShoppingCartModalProps {
   cartItems: CartItem[];
   onUpdateQuantity: (id: number, quantity: number) => void;
   onRemoveItem: (id: number) => void;
+  onCheckout: () => void;
 }
 
 const ShoppingCartModal = ({
@@ -26,6 +27,7 @@ const ShoppingCartModal = ({
   cartItems,
   onUpdateQuantity,
   onRemoveItem,
+  onCheckout,
 }: ShoppingCartModalProps) => {
   if (!isOpen) return null;
 
@@ -197,8 +199,9 @@ const ShoppingCartModal = ({
               </div>
 
               {/* Checkout Button */}
-              <PopButton variant="primary" className="w-full text-xl">
+              <PopButton variant="primary" className="w-full text-xl" onClick={onCheckout}>
                 <span className="flex items-center justify-center gap-2">
+                  <MapPin className="w-5 h-5" />
                   CHECKOUT NOW! 🚀
                 </span>
               </PopButton>
