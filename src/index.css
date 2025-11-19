@@ -9,10 +9,109 @@ The @apply directive should not be used with the group utility class.
 
 @layer base {
   :root {
-   
+    /* Pop Art Color System */
+    --background: 25 100% 97%;
+    --foreground: 0 0% 10%;
+
+    --primary: 14 100% 57%; /* Vibrant Orange */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 330 100% 71%; /* Hot Pink */
+    --secondary-foreground: 0 0% 10%;
+
+    --accent: 60 100% 50%; /* Yellow accent */
+    --accent-foreground: 0 0% 10%;
+
+    --muted: 280 100% 88%; /* Light Purple */
+    --muted-foreground: 0 0% 35%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 14 100% 57%;
+
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+
+    --radius: 0.5rem;
   }
 
   .dark {
+    --background: 0 0% 10%;
+    --foreground: 0 0% 95%;
+  }
 
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  /* Pop Art Dot Pattern */
+  .dots-pattern {
+    background-image: radial-gradient(circle, currentColor 2px, transparent 2px);
+    background-size: 24px 24px;
+  }
+
+  /* Comic Halftone Effect */
+  .halftone-bg {
+    background-image: radial-gradient(circle, rgba(0,0,0,0.15) 1.5px, transparent 1.5px);
+    background-size: 16px 16px;
+  }
+
+  /* Handwritten Font Fallback */
+  .handwritten {
+    font-family: 'Comic Sans MS', 'Brush Script MT', cursive;
+    font-weight: bold;
+    letter-spacing: 0.02em;
+  }
+
+  /* Pop Frame Border */
+  .pop-frame {
+    border: 5px solid hsl(var(--foreground));
+    box-shadow:
+      8px 8px 0 hsl(var(--primary)),
+      16px 16px 0 hsl(var(--secondary));
+  }
+
+  /* Bounce Animation */
+  @keyframes bounce-pop {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-12px) scale(1.05); }
+  }
+
+  .animate-bounce-pop {
+    animation: bounce-pop 0.6s ease-in-out;
+  }
+
+  .animate-bounce-pop-infinite {
+    animation: bounce-pop 2s ease-in-out infinite;
+  }
+
+  /* Wiggle Animation */
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+
+  .animate-wiggle {
+    animation: wiggle 0.5s ease-in-out infinite;
+  }
+
+  /* Comic Text Shadow */
+  .comic-text {
+    text-shadow:
+      3px 3px 0 hsl(var(--primary)),
+      6px 6px 0 hsl(var(--secondary));
   }
 }

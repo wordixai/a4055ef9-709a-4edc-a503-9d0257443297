@@ -84,11 +84,22 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'bounce-pop': {
+					'0%, 100%': { transform: 'translateY(0) scale(1)' },
+					'50%': { transform: 'translateY(-12px) scale(1.05)' }
+				},
+				'wiggle': {
+					'0%, 100%': { transform: 'rotate(-3deg)' },
+					'50%': { transform: 'rotate(3deg)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'bounce-pop': 'bounce-pop 0.6s ease-in-out',
+				'bounce-pop-infinite': 'bounce-pop 2s ease-in-out infinite',
+				'wiggle': 'wiggle 0.5s ease-in-out infinite'
 			}
 		}
 	},
