@@ -6,16 +6,18 @@ interface ProductCardProps {
   price: number;
   image: string;
   category: string;
+  onClick?: () => void;
 }
 
-const ProductCard = ({ name, price, image, category }: ProductCardProps) => {
+const ProductCard = ({ name, price, image, category, onClick }: ProductCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div
-      className="relative group"
+      className="relative group cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={onClick}
     >
       {/* Pop Frame Container */}
       <div className={`pop-frame bg-card overflow-hidden transition-all duration-300 ${isHovered ? 'scale-105' : ''}`}>

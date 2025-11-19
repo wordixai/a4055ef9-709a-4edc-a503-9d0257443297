@@ -1,9 +1,24 @@
+import { useState } from 'react';
 import { ShoppingBag, Zap, Star } from 'lucide-react';
 import Header from '../components/Header';
 import ProductCard from '../components/ProductCard';
 import PopButton from '../components/PopButton';
+import ProductModal from '../components/ProductModal';
 
 const Index = () => {
+  const [selectedProduct, setSelectedProduct] = useState<typeof products[0] | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleProductClick = (product: typeof products[0]) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => setSelectedProduct(null), 300);
+  };
+
   const products = [
     {
       id: 1,
@@ -151,7 +166,11 @@ const Index = () => {
           {/* Products Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 mb-12">
             {products.map((product) => (
-              <ProductCard key={product.id} {...product} />
+              <ProductCard
+                key={product.id}
+                {...product}
+                onClick={() => handleProductClick(product)}
+              />
             ))}
           </div>
 
@@ -236,6 +255,13 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      {/* Product Modal */}
+      <ProductModal
+        product={selectedProduct}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 };
